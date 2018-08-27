@@ -1,0 +1,34 @@
+#viewport li {
+    width: 200px;
+    height: 300px;
+    list-style: none;
+    background: #fff;
+    border-radius: 5px; position: absolute; top: 0; left: 0;
+    box-shadow: 0 0 2px rgba(0,0,0,.2), 1px 1px 1px rgba(0,0,0,.2);
+    border: 10px solid #ECECEC;
+    box-sizing:
+    border-box;
+    cursor: default;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#viewport li.in-deck:nth-child(3) {
+    top: 2px; transform: translate(2px, 2px) rotate(0.4deg);
+}
+
+#viewport li.in-deck:nth-child(2) {
+    top: 4px; transform: translate(-4px, -2px) rotate(-1deg);
+}
+
+#viewport li .math-question {
+  font-size: 3rem;
+  padding-top: 10px;
+}
+
+
+#viewport li .input-container {
+  padding-top: 50px;
+}

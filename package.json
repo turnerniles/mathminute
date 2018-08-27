@@ -1,0 +1,19 @@
+{
+  "name": "math-minute",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "hammerjs": "^2.0.8",
+    "prop-types": "^15.6.2",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "react-scripts": "1.1.5",
+    "swing": "^3.1.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
