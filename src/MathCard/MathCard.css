@@ -1,0 +1,56 @@
+#viewport li {
+  width: 11vw;
+  height: 40vh;
+  list-style: none;
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2), 1px 1px 1px rgba(0, 0, 0, 0.2);
+  border: 10px solid #ececec;
+  box-sizing: border-box;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  top: 10vh;
+  position: absolute;
+  transition-timing-function: ease-in;
+  transition: ease 0.3s;
+}
+
+#viewport li:nth-child(1) {
+  left: 180px;
+}
+
+@media only screen and (max-width: 600px) {
+  #viewport li {
+    width: 40vw;
+    height: 40vh;
+  }
+}
+
+#viewport li.in-deck:nth-child(3) {
+  top: 2px;
+  transform: translate(2px, 2px) rotate(0.4deg);
+}
+
+#viewport li.in-deck:nth-child(2) {
+  top: 4px;
+  transform: translate(-4px, -2px) rotate(-1deg);
+}
+
+#viewport li .math-question {
+  font-size: 3rem;
+  padding-top: 10px;
+}
+
+#viewport li .input-container {
+  padding-top: 50px;
+}
+
+#viewport li .input-container input {
+  font-size: 36px;
+  height: 40px;
+  width: 80%;
+  text-align: center;
+}
