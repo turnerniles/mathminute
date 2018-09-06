@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './App.css';
 import MathCard from './MathCard/MathCard.js';
 import Counter from './Counter/Counter.js';
-const swing = require('swing');
 
 class App extends Component {
   constructor(props) {
@@ -12,19 +11,6 @@ class App extends Component {
     while(eval(currentQuestion) < 0) {
       currentQuestion = this.genRandomNumber() + ' ' + this.genRandomOperator()  + ' ' + this.genRandomNumber();
     }
-    var stack = swing.Stack();
-    window.stack = stack;
-    stack.on('throwout', function (e) {
-        console.log(e.target.innerText || e.target.textContent, 'has been thrown out of the stack to the', e.throwDirection, 'direction.');
-
-        e.target.classList.remove('in-deck');
-    });
-
-    stack.on('throwin', function (e) {
-        console.log(e.target.innerText || e.target.textContent, 'has been thrown into the stack from the', e.throwDirection, 'direction.');
-
-        e.target.classList.add('in-deck');
-    });
 
     this.state = {
       currentQuestion: currentQuestion,
@@ -38,7 +24,6 @@ class App extends Component {
     var cards = [];
     document.querySelectorAll('.stack li').forEach((targetElement) => {
       cards.push(targetElement)
-      window.stack.createCard(targetElement);
       targetElement.classList.add('in-deck');
     })
 
@@ -52,8 +37,6 @@ class App extends Component {
     const value = target.value;
 
     if(value == this.state.answer){
-
-      window.stack.getCard(this.state.cards[this.state.counter]).throwOut(300, 10)
 
       let currentQuestion = this.genRandomNumber() + ' ' + this.genRandomOperator()  + ' ' + this.genRandomNumber()
       while(eval(currentQuestion) < 0) {
@@ -83,7 +66,6 @@ class App extends Component {
   }
 
   flickCorrectlyAnsweredCard = () => {
-    window.stack.getCard(this.state.cards[this.state.counter]).throwOut(300, 10)
     this.setState((state, props) => {
      return {
        counter: state.counter - 1,
