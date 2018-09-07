@@ -1,5 +1,12 @@
+#root {
+  width: 100%;
+  height: 100%;
+}
+
 .App {
   text-align: center;
+  width: 100%;
+  height: 100%;
 }
 
 .App-header {
@@ -30,15 +37,22 @@ input {
 }
 
 #viewport {
-    width: 500px; height: 500px; background: #C7433E; border: 10px solid #ED5D52; margin: 100px auto 0; position: relative;
+    width:100%;
+    height: 100%;
+    background: #C7433E;
+    border: 10px solid #ED5D52;
+    position: relative;
 }
 
 #viewport .stack {
-    width: 200px; height: 300px; background: #ED5D52; position: absolute; top: 100px; left: 50%; margin-left: -100px; border-radius: 10px;
+    background: #ED5D52;
+    border-radius: 10px;
+    display: flex;
 }
 
 #source {
-    width: 500px; margin: 20px auto;
+    width: 500px;
+    margin: 20px auto;
 }
 
 #source a {

@@ -7,46 +7,41 @@ class App extends Component {
   constructor(props) {
     super(props);
     // create a ref to store the textInput DOM element
-    let currentQuestion = this.genRandomNumber() + ' ' + this.genRandomOperator()  + ' ' + this.genRandomNumber()
-    while(eval(currentQuestion) < 0) {
-      currentQuestion = this.genRandomNumber() + ' ' + this.genRandomOperator()  + ' ' + this.genRandomNumber();
+    const questions = [];
+    for (let i=0;i<4;i+=1) {
+      let currentQuestion = this.genRandomNumber() + ' ' + this.genRandomOperator()  + ' ' + this.genRandomNumber()
+      while(eval(currentQuestion) < 0) {
+        currentQuestion = this.genRandomNumber() + ' ' + this.genRandomOperator()  + ' ' + this.genRandomNumber();
+      }
+      questions.push(currentQuestion)
     }
 
+
     this.state = {
-      currentQuestion: currentQuestion,
-      answer: eval(currentQuestion),
+      currentQuestions: questions,
+      answer: eval(questions[0]),
       counter: 1,
       cards: [],
       cardInputValue: '',
     }
-  }
-  componentDidMount() {
-    var cards = [];
-    document.querySelectorAll('.stack li').forEach((targetElement) => {
-      cards.push(targetElement)
-      targetElement.classList.add('in-deck');
-    })
-
-    this.setState({
-      cards,
-      counter: cards.length - 1,
-    })
   }
   onInputChange = (e) => {
     const target = e.target;
     const value = target.value;
 
     if(value == this.state.answer){
-
-      let currentQuestion = this.genRandomNumber() + ' ' + this.genRandomOperator()  + ' ' + this.genRandomNumber()
-      while(eval(currentQuestion) < 0) {
-        currentQuestion = this.genRandomNumber() + ' ' + this.genRandomOperator()  + ' ' + this.genRandomNumber();
+      let newQuestion = this.genRandomNumber() + ' ' + this.genRandomOperator()  + ' ' + this.genRandomNumber()
+      while(eval(newQuestion) < 0) {
+        newQuestion = this.genRandomNumber() + ' ' + this.genRandomOperator()  + ' ' + this.genRandomNumber();
       }
 
       this.setState((state, props) => {
+        const questions = state.currentQuestions;
+        questions.push(newQuestion);
+
        return {
-         currentQuestion: currentQuestion,
-         answer: eval(currentQuestion),
+         currentQuestions: questions,
+         answer: eval(state.currentQuestion[0]),
          counter: state.counter - 1,
          cardInputValue: '',
        }
@@ -75,7 +70,7 @@ class App extends Component {
 
   render() {
     const cards = [];
-    for (let i=0;i<10;i+=1){
+    for (let i=0;i<2;i+=1) {
       cards.push(
         <MathCard
           flickCorrectlyAnsweredCard={this.flickCorrectlyAnsweredCard}
@@ -88,14 +83,15 @@ class App extends Component {
         >
         </MathCard>
       )
+    cards.reverse()
     }
     return (
       <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Math Minute</h1>
-        </header>
         <div id="viewport">
-          <Counter></Counter>
+          <header className="App-header">
+            <h1 className="App-title">Math Minute</h1>
+            <Counter></Counter>
+          </header>
             <ul className="stack">
               {cards}
             </ul>

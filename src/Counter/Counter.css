@@ -12,26 +12,27 @@ body {
 }
 
 .container {
-  height: 200px;
-  width: 200px;
+  height: 100px;
+  width: 100px;
   position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  top: 0;
 }
 
 .countdown {
   display: block;
-  width: 200px;
-  height: 200px;
+  width: 100px;
+  height: 100px;
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: 'Oswald', sans-serif;
   font-weight: 400;
-  font-size: 100px;
+  font-size: 50px;
   border-radius: 50%;
   overflow: hidden;
   cursor: pointer;

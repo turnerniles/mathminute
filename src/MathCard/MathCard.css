@@ -1,9 +1,9 @@
 #viewport li {
-    width: 200px;
-    height: 300px;
+    width: 25vw;
+    height: 40vh;
     list-style: none;
     background: #fff;
-    border-radius: 5px; position: absolute; top: 0; left: 0;
+    border-radius: 5px;
     box-shadow: 0 0 2px rgba(0,0,0,.2), 1px 1px 1px rgba(0,0,0,.2);
     border: 10px solid #ECECEC;
     box-sizing:
@@ -13,6 +13,14 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    top: 10vw;
+}
+
+@media only screen and (max-width: 600px) {
+    #viewport li {
+    width: 50vw;
+    height: 40vh;
+  }
 }
 
 #viewport li.in-deck:nth-child(3) {
@@ -28,7 +36,13 @@
   padding-top: 10px;
 }
 
-
 #viewport li .input-container {
   padding-top: 50px;
+}
+
+#viewport li .input-container input {
+  font-size: 36px;
+  height: 40px;
+  width: 80%;
+  text-align: center;
 }

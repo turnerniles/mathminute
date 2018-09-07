@@ -98,10 +98,10 @@ export default class Counter extends Component {
 
     render() {
       return (
-        <div class="container">
-          <div class="countdown" id="countdown">
-            <div class="countdown__fill" id="ticker"></div>
-            <div class="countdown__digit" id="seconds">00</div>
+        <div className="container">
+          <div className="countdown" id="countdown">
+            <div className="countdown__fill" id="ticker"></div>
+            <div className="countdown__digit" id="seconds">00</div>
           </div>
         </div>
       )
