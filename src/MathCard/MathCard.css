@@ -14,11 +14,19 @@
     justify-content: center;
     flex-direction: column;
     top: 10vw;
+    position: absolute;
+    transition-timing-function: ease-in;
+    transition: ease 1s;
 }
+
+#viewport li:nth-child(1){
+  left: 180px;
+}
+
 
 @media only screen and (max-width: 600px) {
     #viewport li {
-    width: 50vw;
+    width: 40vw;
     height: 40vh;
   }
 }

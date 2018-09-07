@@ -45,23 +45,14 @@ export default class MathCard extends Component {
   }
 
   masterOnInputChange = (e) => {
-    // this.focusTextInput();
-    console.log('hey', e)
+    console.log('hey', e.keyCode)
     this.props.onInputChange(e)
   }
 
-  onInputChange = (e) => {
-    const target = e.target;
-    const value = target.value;
-    console.log(value, this.state.answer)
-    if(value == this.state.answer){
-      this.props.flickCorrectlyAnsweredCard();
-    }
-  }
-
   render() {
+    console.log(this.props.leftPosition)
     return (
-      <li className="math-card">
+      <li className="math-card" style={{left: this.props.leftPosition, transition: this.props.isMoving ? 'ease 1s' : 'initial'}}>
         <div className="math-question">{this.props.currentQuestion}</div>
         <div className="input-container">
           <input
@@ -71,6 +62,7 @@ export default class MathCard extends Component {
             onChange={this.masterOnInputChange}
             value={this.props.cardInputValue}
             ref={this[`${'textInput'+this.props.index}`]}
+            onKeyPress={this.props.handleKeyPress}
           />
         </div>
       </li>

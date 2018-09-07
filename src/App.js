@@ -8,12 +8,14 @@ class App extends Component {
     super(props);
     // create a ref to store the textInput DOM element
     const questions = [];
-    for (let i=0;i<4;i+=1) {
+    const positions = []
+    for (let i=0;i<10;i+=1) {
       let currentQuestion = this.genRandomNumber() + ' ' + this.genRandomOperator()  + ' ' + this.genRandomNumber()
       while(eval(currentQuestion) < 0) {
         currentQuestion = this.genRandomNumber() + ' ' + this.genRandomOperator()  + ' ' + this.genRandomNumber();
       }
       questions.push(currentQuestion)
+      positions.push(180*i);
     }
 
 
@@ -23,6 +25,7 @@ class App extends Component {
       counter: 1,
       cards: [],
       cardInputValue: '',
+      cardPositions: positions,
     }
   }
   onInputChange = (e) => {
@@ -60,17 +63,29 @@ class App extends Component {
     return ['+', '-', '*'][randNum]
   }
 
-  flickCorrectlyAnsweredCard = () => {
-    this.setState((state, props) => {
-     return {
-       counter: state.counter - 1,
-     }
-    })
-  }
+  handleCardKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      console.log('event')
+      console.log('do validate');
+      this.setState((state, props) => {
+        const positions = state.cardPositions;
+        positions.forEach((postion, i) => {
+          positions[i] = positions[i] - 180;
+        })
+      return {
+        isMoving: true,
+        cardPositions: positions,
+      }});
+      // setTimeout(() => {this.setState({
+      //   isMoving: false,
+      //   cardPositions: [0, 180, 360],
+      // })},2000)
+    }
+}
 
   render() {
     const cards = [];
-    for (let i=0;i<2;i+=1) {
+    for (let i=0;i<10;i+=1) {
       cards.push(
         <MathCard
           flickCorrectlyAnsweredCard={this.flickCorrectlyAnsweredCard}
@@ -80,6 +95,9 @@ class App extends Component {
           index={i}
           counter={this.state.counter}
           key={i}
+          handleKeyPress={this.handleCardKeyPress}
+          leftPosition={this.state.cardPositions[i]}
+          isMoving={this.state.isMoving}
         >
         </MathCard>
       )
