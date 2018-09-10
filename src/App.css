@@ -42,6 +42,7 @@ input {
     background: #C7433E;
     border: 10px solid #ED5D52;
     position: relative;
+    overflow: hidden;
 }
 
 #viewport .stack {

@@ -18,22 +18,22 @@ class App extends Component {
       positions.push(180*i);
     }
 
-
     this.state = {
       currentQuestions: questions,
       answer: eval(questions[0]),
-      counter: 1,
+      counter: 0,
       cards: [],
       cardInputValue: '',
       cardPositions: positions,
     }
   }
+
   onInputChange = (e) => {
     const target = e.target;
     const value = target.value;
 
-    if(value == this.state.answer){
-      let newQuestion = this.genRandomNumber() + ' ' + this.genRandomOperator()  + ' ' + this.genRandomNumber()
+    if(value == this.state.answer) {
+      let newQuestion = this.genRandomNumber() + ' ' + this.genRandomOperator()  + ' ' + this.genRandomNumber();
       while(eval(newQuestion) < 0) {
         newQuestion = this.genRandomNumber() + ' ' + this.genRandomOperator()  + ' ' + this.genRandomNumber();
       }
@@ -55,9 +55,11 @@ class App extends Component {
       })
     }
   }
+
   genRandomNumber = () => {
     return Math.floor((Math.random() * 12) + 1);
   }
+
   genRandomOperator = () => {
     const randNum = Math.floor((Math.random() * 3));
     return ['+', '-', '*'][randNum]
@@ -65,7 +67,7 @@ class App extends Component {
 
   handleCardKeyPress = (e) => {
     if (e.key === 'Enter') {
-      console.log('event')
+      console.log('event');
       console.log('do validate');
       this.setState((state, props) => {
         const positions = state.cardPositions;
@@ -76,10 +78,6 @@ class App extends Component {
         isMoving: true,
         cardPositions: positions,
       }});
-      // setTimeout(() => {this.setState({
-      //   isMoving: false,
-      //   cardPositions: [0, 180, 360],
-      // })},2000)
     }
 }
 
@@ -100,8 +98,8 @@ class App extends Component {
           isMoving={this.state.isMoving}
         >
         </MathCard>
-      )
-    cards.reverse()
+      );
+    cards.reverse();
     }
     return (
       <div className="App">

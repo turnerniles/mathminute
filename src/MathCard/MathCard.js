@@ -49,6 +49,10 @@ export default class MathCard extends Component {
     this.props.onInputChange(e)
   }
 
+  blurred = (e) => {
+    console.log('hey', e)
+  }
+
   render() {
     console.log(this.props.leftPosition)
     return (
@@ -63,6 +67,7 @@ export default class MathCard extends Component {
             value={this.props.cardInputValue}
             ref={this[`${'textInput'+this.props.index}`]}
             onKeyPress={this.props.handleKeyPress}
+            onBlur={this.blurred}
           />
         </div>
       </li>
