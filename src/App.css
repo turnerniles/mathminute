@@ -49,6 +49,8 @@ input {
     background: #ED5D52;
     border-radius: 10px;
     display: flex;
+    position: absolute;
+    top: 200px;
 }
 
 #source {

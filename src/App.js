@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import MathCard from './MathCard/MathCard.js';
 import Counter from './Counter/Counter.js';
+import firebase from './firebase.js';
 
 class App extends Component {
   constructor(props) {
@@ -25,35 +26,24 @@ class App extends Component {
       cards: [],
       cardInputValue: '',
       cardPositions: positions,
+      numCorrect: 0,
+      numIncorrect: 0,
     }
+  }
+
+  componentDidMount(){
+    var presenceRef = firebase.database().ref("disconnectmessage");
+    // Write a string when this client loses connection
+    presenceRef.onDisconnect().set("I disconnected!");    
   }
 
   onInputChange = (e) => {
     const target = e.target;
     const value = target.value;
 
-    if(value == this.state.answer) {
-      let newQuestion = this.genRandomNumber() + ' ' + this.genRandomOperator()  + ' ' + this.genRandomNumber();
-      while(eval(newQuestion) < 0) {
-        newQuestion = this.genRandomNumber() + ' ' + this.genRandomOperator()  + ' ' + this.genRandomNumber();
-      }
-
-      this.setState((state, props) => {
-        const questions = state.currentQuestions;
-        questions.push(newQuestion);
-
-       return {
-         currentQuestions: questions,
-         answer: eval(state.currentQuestion[0]),
-         counter: state.counter - 1,
-         cardInputValue: '',
-       }
-      })
-    } else {
-      this.setState({
-        cardInputValue: value,
-      })
-    }
+    this.setState({
+      cardInputValue: value,
+    })
   }
 
   genRandomNumber = () => {
@@ -66,18 +56,56 @@ class App extends Component {
   }
 
   handleCardKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      console.log('event');
-      console.log('do validate');
+    const isMobile = (/Android|iPhone|iPad/i.test(navigator.userAgent))
+    if (e.key === 'Enter' || e.key === 'Tab' || e.type === 'blur') {
+      e.preventDefault();
+    }
+
+    if ((((e.key === 'Enter' || e.key === 'Tab') && !isMobile) || (e.type === 'blur' && isMobile)) && !this.state.isMoving) {
+      console.log('doing')
+      const a = this.state.cardInputValue == this.state.answer;
+
       this.setState((state, props) => {
         const positions = state.cardPositions;
         positions.forEach((postion, i) => {
           positions[i] = positions[i] - 180;
         })
+
+      console.log(state.numCorrect)
+      const numCorrect = state.cardInputValue == state.answer ? state.numCorrect + 1 : state.numCorrect;
+      const numIncorrect = state.cardInputValue != state.answer ? state.numIncorrect + 1 : state.numIncorrect;
+
+      const correctRef = firebase.database().ref('correctRef');
+      const incorrectRef = firebase.database().ref('incorrectRef');
+
+      if (state.cardInputValue == state.answer){
+        correctRef.push(numCorrect);
+      } else {
+        incorrectRef.push(numIncorrect);
+      }
+
       return {
+        numCorrect,
+        numIncorrect,
         isMoving: true,
         cardPositions: positions,
+        counter: state.counter + 1,
+        answer: eval(state.currentQuestions[state.counter + 1]),
+        cardInputValue: '',
       }});
+
+      setTimeout(() => {
+        // Since we can't control a blur firing after hitting enter
+        // and focusing on the next input we would create an infite loop
+        // of 'Enter triggering this function followed by the onBlur triggering this
+        // function follow by another onBlur and so on and so forth.
+        // Currently set to the animation speed of the card.
+        this.setState({
+          isMoving: false,
+        })
+      }, 1000)
+    }
+    else {
     }
 }
 
@@ -86,9 +114,8 @@ class App extends Component {
     for (let i=0;i<10;i+=1) {
       cards.push(
         <MathCard
-          flickCorrectlyAnsweredCard={this.flickCorrectlyAnsweredCard}
           cardInputValue={this.state.cardInputValue}
-          currentQuestion={this.state.currentQuestion}
+          cardValue={this.state.currentQuestions[i]}
           onInputChange={this.onInputChange}
           index={i}
           counter={this.state.counter}
@@ -99,14 +126,17 @@ class App extends Component {
         >
         </MathCard>
       );
-    cards.reverse();
+    cards;
     }
+    console.log(cards)
     return (
       <div className="App">
         <div id="viewport">
           <header className="App-header">
             <h1 className="App-title">Math Minute</h1>
             <Counter></Counter>
+            <div>Number Correct {this.state.numCorrect}</div>
+            <div>Number Incorrect {this.state.numIncorrect}</div>
           </header>
             <ul className="stack">
               {cards}

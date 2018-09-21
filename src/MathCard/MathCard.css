@@ -1,5 +1,5 @@
 #viewport li {
-    width: 25vw;
+    width: 11vw;
     height: 40vh;
     list-style: none;
     background: #fff;
@@ -13,7 +13,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    top: 10vw;
+    top: 10vh;
     position: absolute;
     transition-timing-function: ease-in;
     transition: ease 1s;

@@ -6,14 +6,8 @@ export default class MathCard extends Component {
   constructor(props) {
     super(props);
     // create a ref to store the textInput DOM element
+    console.log(this.props.index)
     this[`${'textInput'+this.props.index}`] = React.createRef();
-
-    const question = this.genRandomNumber() + ' ' + this.genRandomOperator()  + ' ' + this.genRandomNumber()
-
-    this.state = {
-      currentQuestion: question,
-      answer: eval(question),
-    }
   }
 
   componentDidMount() {
@@ -23,18 +17,10 @@ export default class MathCard extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.counter === nextProps.index){
+    if(nextProps.counter === nextProps.index) {
+      console.log('focusing', nextProps.counter)
       this.focusTextInput(nextProps.counter);
     }
-  }
-
-  genRandomNumber = () => {
-    return Math.floor((Math.random() * 12) + 1);
-  }
-
-  genRandomOperator = () => {
-    const randNum = Math.floor((Math.random() * 3));
-    return ['+', '-', '*'][randNum]
   }
 
   focusTextInput = (index) => {
@@ -45,29 +31,23 @@ export default class MathCard extends Component {
   }
 
   masterOnInputChange = (e) => {
-    console.log('hey', e.keyCode)
     this.props.onInputChange(e)
   }
 
-  blurred = (e) => {
-    console.log('hey', e)
-  }
-
   render() {
-    console.log(this.props.leftPosition)
     return (
       <li className="math-card" style={{left: this.props.leftPosition, transition: this.props.isMoving ? 'ease 1s' : 'initial'}}>
-        <div className="math-question">{this.props.currentQuestion}</div>
+        <div className="math-question">{this.props.cardValue}</div>
         <div className="input-container">
           <input
+            type="tel"
             id={"math-card-input"+this.props.index}
             name={"math-card-input"+this.props.index}
-            type="text"
             onChange={this.masterOnInputChange}
-            value={this.props.cardInputValue}
+            value={this.props.counter === this.props.index ? this.props.cardInputValue : ''}
             ref={this[`${'textInput'+this.props.index}`]}
-            onKeyPress={this.props.handleKeyPress}
-            onBlur={this.blurred}
+            onKeyDown={this.props.handleKeyPress}
+            onBlur={this.props.handleKeyPress}
           />
         </div>
       </li>
