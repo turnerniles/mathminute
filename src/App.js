@@ -1,22 +1,32 @@
-import React, { Component } from 'react';
-import './App.css';
-import MathCard from './MathCard/MathCard.js';
-import Counter from './Counter/Counter.js';
-import firebase from './firebase.js';
+import React, { Component } from "react";
+import "./App.css";
+import MathCard from "./MathCard/MathCard.js";
+import Counter from "./Counter/Counter.js";
+import firebase from "./firebase.js";
 
 class App extends Component {
   constructor(props) {
     super(props);
     // create a ref to store the textInput DOM element
     const questions = [];
-    const positions = []
-    for (let i=0;i<10;i+=1) {
-      let currentQuestion = this.genRandomNumber() + ' ' + this.genRandomOperator()  + ' ' + this.genRandomNumber()
-      while(eval(currentQuestion) < 0) {
-        currentQuestion = this.genRandomNumber() + ' ' + this.genRandomOperator()  + ' ' + this.genRandomNumber();
+    const positions = [];
+    for (let i = 0; i < 10; i += 1) {
+      let currentQuestion =
+        this.genRandomNumber() +
+        " " +
+        this.genRandomOperator() +
+        " " +
+        this.genRandomNumber();
+      while (eval(currentQuestion) < 0) {
+        currentQuestion =
+          this.genRandomNumber() +
+          " " +
+          this.genRandomOperator() +
+          " " +
+          this.genRandomNumber();
       }
-      questions.push(currentQuestion)
-      positions.push(180*i);
+      questions.push(currentQuestion);
+      positions.push(180 * i);
     }
 
     this.state = {
@@ -24,75 +34,143 @@ class App extends Component {
       answer: eval(questions[0]),
       counter: 0,
       cards: [],
-      cardInputValue: '',
+      cardInputValue: "",
       cardPositions: positions,
       numCorrect: 0,
       numIncorrect: 0,
-    }
+      otherScores: [],
+      playerName: "dogman" + Math.floor(Math.random() * 100),
+      storedRef: null
+    };
   }
 
-  componentDidMount(){
-    var presenceRef = firebase.database().ref("disconnectmessage");
-    // Write a string when this client loses connection
-    presenceRef.onDisconnect().set("I disconnected!");    
+  componentDidMount() {
+    window.firebase = firebase;
+
+    console.log("beast");
+    var leadsRef = firebase.database().ref("scores");
+
+    var otherScores = [];
+    leadsRef.on("value", snapshot => {
+      otherScores = [];
+      snapshot.forEach(childSnapshot => {
+        var childData = childSnapshot.val();
+        otherScores.push(childData);
+        this.setState({
+          otherScores
+        });
+      });
+    });
+
+    firebase
+      .database()
+      .ref("/.info/serverTimeOffset")
+      .once("value")
+      .then(
+        data => {
+          console.log(60 - new Date(data.val() + Date.now()));
+          this.setState(
+            {
+              serverTimeSeconds:
+                60 - new Date(data.val() + Date.now()).getSeconds()
+            },
+            () => {
+              console.log("got seconds", this.state.serverTimeSeconds);
+            }
+          );
+        },
+        function(err) {
+          return err;
+        }
+      );
+
+    const fireBaseRef = {
+      playerName: this.state.playerName,
+      correctRef: 0,
+      incorrectRef: 0
+    };
+
+    var storedScore = firebase
+      .database()
+      .ref("scores")
+      .push(fireBaseRef);
+
+    this.setState({
+      storedRef: storedScore.key
+    });
+
+    storedScore.onDisconnect().remove();
   }
 
-  onInputChange = (e) => {
+  onInputChange = e => {
     const target = e.target;
     const value = target.value;
 
     this.setState({
-      cardInputValue: value,
-    })
-  }
+      cardInputValue: value
+    });
+  };
 
   genRandomNumber = () => {
-    return Math.floor((Math.random() * 12) + 1);
-  }
+    return Math.floor(Math.random() * 12 + 1);
+  };
 
   genRandomOperator = () => {
-    const randNum = Math.floor((Math.random() * 3));
-    return ['+', '-', '*'][randNum]
-  }
+    const randNum = Math.floor(Math.random() * 3);
+    return ["+", "-", "*"][randNum];
+  };
 
-  handleCardKeyPress = (e) => {
-    const isMobile = (/Android|iPhone|iPad/i.test(navigator.userAgent))
-    if (e.key === 'Enter' || e.key === 'Tab' || e.type === 'blur') {
+  handleCardKeyPress = e => {
+    const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
+    if (e.key === "Enter" || e.key === "Tab" || e.type === "blur") {
       e.preventDefault();
     }
 
-    if ((((e.key === 'Enter' || e.key === 'Tab') && !isMobile) || (e.type === 'blur' && isMobile)) && !this.state.isMoving) {
-      console.log('doing')
+    if (
+      (((e.key === "Enter" || e.key === "Tab") && !isMobile) ||
+        (e.type === "blur" && isMobile)) &&
+      !this.state.isMoving
+    ) {
+      console.log("doing");
       const a = this.state.cardInputValue == this.state.answer;
 
       this.setState((state, props) => {
         const positions = state.cardPositions;
         positions.forEach((postion, i) => {
           positions[i] = positions[i] - 180;
-        })
+        });
 
-      console.log(state.numCorrect)
-      const numCorrect = state.cardInputValue == state.answer ? state.numCorrect + 1 : state.numCorrect;
-      const numIncorrect = state.cardInputValue != state.answer ? state.numIncorrect + 1 : state.numIncorrect;
+        console.log(state.numCorrect);
+        const numCorrect =
+          state.cardInputValue == state.answer
+            ? state.numCorrect + 1
+            : state.numCorrect;
+        const numIncorrect =
+          state.cardInputValue != state.answer
+            ? state.numIncorrect + 1
+            : state.numIncorrect;
 
-      const correctRef = firebase.database().ref('correctRef');
-      const incorrectRef = firebase.database().ref('incorrectRef');
+        const fireBaseRef = {
+          playerName: this.state.playerName,
+          correctRef: numCorrect,
+          incorrectRef: numIncorrect
+        };
 
-      if (state.cardInputValue == state.answer){
-        correctRef.push(numCorrect);
-      } else {
-        incorrectRef.push(numIncorrect);
-      }
+        firebase
+          .database()
+          .ref()
+          .update({ [`scores/${this.state.storedRef}`]: fireBaseRef });
 
-      return {
-        numCorrect,
-        numIncorrect,
-        isMoving: true,
-        cardPositions: positions,
-        counter: state.counter + 1,
-        answer: eval(state.currentQuestions[state.counter + 1]),
-        cardInputValue: '',
-      }});
+        return {
+          numCorrect,
+          numIncorrect,
+          isMoving: true,
+          cardPositions: positions,
+          counter: state.counter + 1,
+          answer: eval(state.currentQuestions[state.counter + 1]),
+          cardInputValue: ""
+        };
+      });
 
       setTimeout(() => {
         // Since we can't control a blur firing after hitting enter
@@ -101,17 +179,16 @@ class App extends Component {
         // function follow by another onBlur and so on and so forth.
         // Currently set to the animation speed of the card.
         this.setState({
-          isMoving: false,
-        })
-      }, 1000)
+          isMoving: false
+        });
+      }, 1000);
     }
-    else {
-    }
-}
+  };
 
   render() {
     const cards = [];
-    for (let i=0;i<10;i+=1) {
+    const otherScores = [];
+    for (let i = 0; i < 10; i += 1) {
       cards.push(
         <MathCard
           cardInputValue={this.state.cardInputValue}
@@ -123,24 +200,31 @@ class App extends Component {
           handleKeyPress={this.handleCardKeyPress}
           leftPosition={this.state.cardPositions[i]}
           isMoving={this.state.isMoving}
-        >
-        </MathCard>
+        />
       );
-    cards;
     }
-    console.log(cards)
+
+    for (let i = 0; i < this.state.otherScores.length; i += 1) {
+      otherScores.push(
+        <div className="otherScore" key={i}>
+          <div>{this.state.otherScores[i].playerName}</div>
+          <div>Correct: {this.state.otherScores[i].correctRef}</div>
+          <div>Incorrect: {this.state.otherScores[i].incorrectRef}</div>
+        </div>
+      );
+    }
+
     return (
       <div className="App">
         <div id="viewport">
           <header className="App-header">
             <h1 className="App-title">Math Minute</h1>
-            <Counter></Counter>
+            <Counter serverTimeSeconds={this.state.serverTimeSeconds} />
             <div>Number Correct {this.state.numCorrect}</div>
             <div>Number Incorrect {this.state.numIncorrect}</div>
           </header>
-            <ul className="stack">
-              {cards}
-            </ul>
+          <div className="otherScores">{otherScores}</div>
+          <ul className="stack">{cards}</ul>
         </div>
       </div>
     );
