@@ -6,7 +6,6 @@ export default class MathCard extends Component {
   constructor(props) {
     super(props);
     // create a ref to store the textInput DOM element
-    console.log(this.props.index);
     this[`${"textInput" + this.props.index}`] = React.createRef();
   }
 
@@ -18,7 +17,6 @@ export default class MathCard extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.counter === nextProps.index) {
-      console.log("focusing", nextProps.counter);
       this.focusTextInput(nextProps.counter);
     }
   }
@@ -26,7 +24,6 @@ export default class MathCard extends Component {
   focusTextInput = index => {
     // Explicitly focus the text input using the raw DOM API
     // Note: we're accessing "current" to get the DOM node
-    console.log(`focusing ${"textInput" + index}`);
     this[`${"textInput" + index}`].current.focus();
   };
 

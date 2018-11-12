@@ -46,7 +46,6 @@ class App extends Component {
   componentDidMount() {
     window.firebase = firebase;
 
-    console.log("beast");
     var leadsRef = firebase.database().ref("scores");
 
     var otherScores = [];
@@ -67,16 +66,10 @@ class App extends Component {
       .once("value")
       .then(
         data => {
-          console.log(60 - new Date(data.val() + Date.now()));
-          this.setState(
-            {
-              serverTimeSeconds:
-                60 - new Date(data.val() + Date.now()).getSeconds()
-            },
-            () => {
-              console.log("got seconds", this.state.serverTimeSeconds);
-            }
-          );
+          this.setState({
+            serverTimeSeconds:
+              60 - new Date(data.val() + Date.now()).getSeconds()
+          });
         },
         function(err) {
           return err;
@@ -130,7 +123,6 @@ class App extends Component {
         (e.type === "blur" && isMobile)) &&
       !this.state.isMoving
     ) {
-      console.log("doing");
       const a = this.state.cardInputValue == this.state.answer;
 
       this.setState((state, props) => {
@@ -139,7 +131,6 @@ class App extends Component {
           positions[i] = positions[i] - 180;
         });
 
-        console.log(state.numCorrect);
         const numCorrect =
           state.cardInputValue == state.answer
             ? state.numCorrect + 1

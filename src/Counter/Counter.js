@@ -13,12 +13,6 @@ export default class Counter extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.serverTimeSeconds && !this.state.initialTimerSet) {
-      console.log(
-        "got the offset",
-        nextProps.serverTimeSeconds,
-        typeof nextProps.serverTimeSeconds
-      );
-
       var timer = new Timer(
         1000 * nextProps.serverTimeSeconds,
         document.getElementById("countdown")
@@ -27,12 +21,10 @@ export default class Counter extends Component {
       this.setState({ initialTimerSet: true });
 
       setTimeout(() => {
-        console.log("calling");
         timer.reset();
         timer.setDuration(60000);
         timer.start();
         setInterval(() => {
-          console.log("boo");
           timer.reset();
           timer.setDuration(60000);
           timer.start();
