@@ -7,7 +7,6 @@ import firebase from "./firebase.js";
 class App extends Component {
   constructor(props) {
     super(props);
-    // create a ref to store the textInput DOM element
     const questions = [];
     const positions = [];
     for (let i = 0; i < 10; i += 1) {
