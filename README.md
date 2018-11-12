@@ -1,4 +1,5 @@
 ## Math Minute
+https://turnerniles.github.io/mathminute/
 
 ## Work In Progress
 I'm currently working on making this a multiplayer game that resets every 60 seconds. The idea is to answer as many math questions as possible with in 60s.
@@ -9,7 +10,7 @@ I'm currently using react-create-app, firebase realtime database and an animated
 ## Help Wanted
 - The basics of the game are there now but there's still a lot of work to be done. Please see the issues list for the current status of what needs to be done.
 
-- Unlimited questions (currently only 20 questions are displayed)
+- Unlimited questions (currently only 10 questions are displayed)
 - Addition of division questions
 - Mobile compatibility
 - Component testing
