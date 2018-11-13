@@ -1,5 +1,7 @@
 ## Math Minute
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/turnerniles/mathminute.svg)](https://greenkeeper.io/)
+
 https://turnerniles.github.io/mathminute/
 
 ## Work In Progress
