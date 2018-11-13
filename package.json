@@ -2,7 +2,7 @@
   "name": "math-minute",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://turnerniles.github.io/mathminute",
+  "homepage": "https://turnerniles.github.io/mathminute",
   "dependencies": {
     "hammerjs": "^2.0.8",
     "prop-types": "^15.6.2",
