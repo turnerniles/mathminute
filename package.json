@@ -8,7 +8,7 @@
     "prop-types": "^15.6.2",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
-    "react-scripts": "2.0.3"
+    "react-scripts": "2.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "firebase": "^5.5.0",
-    "gh-pages": "^1.2.0"
+    "gh-pages": "^2.0.1"
   },
   "browserslist": [
     ">0.2%",
