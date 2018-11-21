@@ -9,7 +9,7 @@ class App extends Component {
     super(props);
     const questions = [];
     const positions = [];
-    for (let i = 0; i < 10; i += 1) {
+    for (let i = 0; i < 100; i += 1) {
       let currentQuestion =
         this.genRandomNumber() +
         " " +
@@ -178,7 +178,7 @@ class App extends Component {
   render() {
     const cards = [];
     const otherScores = [];
-    for (let i = 0; i < 10; i += 1) {
+    for (let i = 0; i < 100; i += 1) {
       cards.push(
         <MathCard
           cardInputValue={this.state.cardInputValue}

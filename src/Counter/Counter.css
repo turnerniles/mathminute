@@ -30,7 +30,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Oswald', sans-serif;
+  font-family: "Oswald", sans-serif;
   font-weight: 400;
   font-size: 50px;
   border-radius: 50%;
@@ -41,46 +41,60 @@ body {
 }
 .countdown--ended {
   -webkit-animation: buzz 0.5s;
-          animation: buzz 0.5s;
+  animation: buzz 0.5s;
 }
 .countdown:active {
   -webkit-transform: scale(1.02);
-          transform: scale(1.02);
+  transform: scale(1.02);
 }
 @-webkit-keyframes buzz {
   0% {
     -webkit-transform: rotate(0);
-            transform: rotate(0);
+    transform: rotate(0);
   }
-  10%, 30%, 50%, 70%, 90% {
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
     -webkit-transform: rotate(6deg);
-            transform: rotate(6deg);
+    transform: rotate(6deg);
   }
-  20%, 40%, 60%, 80% {
+  20%,
+  40%,
+  60%,
+  80% {
     -webkit-transform: rotate(-6deg);
-            transform: rotate(-6deg);
+    transform: rotate(-6deg);
   }
   100% {
     -webkit-transform: rotate(0);
-            transform: rotate(0);
+    transform: rotate(0);
   }
 }
 @keyframes buzz {
   0% {
     -webkit-transform: rotate(0);
-            transform: rotate(0);
+    transform: rotate(0);
   }
-  10%, 30%, 50%, 70%, 90% {
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
     -webkit-transform: rotate(6deg);
-            transform: rotate(6deg);
+    transform: rotate(6deg);
   }
-  20%, 40%, 60%, 80% {
+  20%,
+  40%,
+  60%,
+  80% {
     -webkit-transform: rotate(-6deg);
-            transform: rotate(-6deg);
+    transform: rotate(-6deg);
   }
   100% {
     -webkit-transform: rotate(0);
-            transform: rotate(0);
+    transform: rotate(0);
   }
 }
 .countdown--wide {
@@ -96,19 +110,19 @@ body {
   position: absolute;
   left: 0;
   bottom: 0;
-  background: #FF5722;
+  background: #8ab0ab;
   opacity: 1;
 }
 .countdown__digit {
   width: 100%;
-  color: #FF5722;
+  color: #8ab0ab;
   text-align: center;
   mix-blend-mode: difference;
   pointer-events: none;
   -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .countdown__buttons {
   position: absolute;
@@ -128,7 +142,7 @@ body {
   right: 10px;
   bottom: 10px;
   padding: 1em 0.5em 0.5em 2em;
-  font-family: 'Oswald', sans-serif;
+  font-family: "Oswald", sans-serif;
   text-transform: uppercase;
   color: white;
   cursor: pointer;
