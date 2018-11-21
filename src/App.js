@@ -3,6 +3,7 @@ import "./App.css";
 import MathCard from "./MathCard/MathCard.js";
 import Counter from "./Counter/Counter.js";
 import firebase from "./firebase.js";
+import { generateQuestion } from "./QuestionGen.js";
 
 class App extends Component {
   constructor(props) {
@@ -10,21 +11,7 @@ class App extends Component {
     const questions = [];
     const positions = [];
     for (let i = 0; i < 100; i += 1) {
-      let currentQuestion =
-        this.genRandomNumber() +
-        " " +
-        this.genRandomOperator() +
-        " " +
-        this.genRandomNumber();
-      while (eval(currentQuestion) < 0) {
-        currentQuestion =
-          this.genRandomNumber() +
-          " " +
-          this.genRandomOperator() +
-          " " +
-          this.genRandomNumber();
-      }
-      questions.push(currentQuestion);
+      questions.push(generateQuestion());
       positions.push(180 * i);
     }
 
@@ -123,8 +110,6 @@ class App extends Component {
         (e.type === "blur" && isMobile)) &&
       !this.state.isMoving
     ) {
-      const a = this.state.cardInputValue == this.state.answer;
-
       this.setState((state, props) => {
         const positions = state.cardPositions;
         positions.forEach((postion, i) => {
