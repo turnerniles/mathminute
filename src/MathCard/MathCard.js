@@ -10,14 +10,14 @@ export default class MathCard extends Component {
   }
 
   componentDidMount() {
-    if (this.props.counter === this.props.index) {
-      this.focusTextInput(this.props.counter);
+    if (this.props.currentQuestionIndex === this.props.index) {
+      this.focusTextInput(this.props.currentQuestionIndex);
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.counter === nextProps.index) {
-      this.focusTextInput(nextProps.counter);
+    if (nextProps.currentQuestionIndex === nextProps.index) {
+      this.focusTextInput(nextProps.currentQuestionIndex);
     }
   }
 
@@ -48,7 +48,7 @@ export default class MathCard extends Component {
             name={"math-card-input" + this.props.index}
             onChange={this.masterOnInputChange}
             value={
-              this.props.counter === this.props.index
+              this.props.currentQuestionIndex === this.props.index
                 ? this.props.cardInputValue
                 : ""
             }

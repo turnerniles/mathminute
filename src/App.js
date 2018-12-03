@@ -10,12 +10,13 @@ class App extends Component {
     super(props);
     const questions = [];
     const positions = [];
-    for (let i = 0; i < 100; i += 1) {
+    for (let i = 0; i < 2; i += 1) {
       questions.push(generateQuestion());
       positions.push(180 * i);
     }
 
     this.state = {
+      currentQuestionIndex: 0,
       currentQuestions: questions,
       answer: eval(questions[0]),
       counter: 0,
@@ -25,7 +26,7 @@ class App extends Component {
       numCorrect: 0,
       numIncorrect: 0,
       otherScores: [],
-      playerName: "dogman" + Math.floor(Math.random() * 100),
+      playerName: "dogman" + Math.floor(Math.random() * 2),
       storedRef: null
     };
   }
@@ -111,10 +112,13 @@ class App extends Component {
       !this.state.isMoving
     ) {
       this.setState((state, props) => {
-        const positions = state.cardPositions;
-        positions.forEach((postion, i) => {
-          positions[i] = positions[i] - 180;
-        });
+        // const positions = state.cardPositions;
+        // positions.forEach((postion, i) => {
+        //   positions[i] = positions[i] - 180;
+        // });
+
+        var currentQuestions = this.state.currentQuestions;
+        currentQuestions[this.state.currentQuestionIndex] = generateQuestion();
 
         const numCorrect =
           state.cardInputValue == state.answer
@@ -131,18 +135,22 @@ class App extends Component {
           incorrectRef: numIncorrect
         };
 
+        const nextQuestionIndex = this.state.currentQuestionIndex === 0 ? 1 : 0;
+
         firebase
           .database()
           .ref()
           .update({ [`scores/${this.state.storedRef}`]: fireBaseRef });
 
         return {
+          currentQuestionIndex: nextQuestionIndex,
           numCorrect,
           numIncorrect,
           isMoving: true,
-          cardPositions: positions,
+          // cardPositions: positions,
+          currentQuestions,
           counter: state.counter + 1,
-          answer: eval(state.currentQuestions[state.counter + 1]),
+          answer: eval(state.currentQuestions[nextQuestionIndex]),
           cardInputValue: ""
         };
       });
@@ -161,23 +169,8 @@ class App extends Component {
   };
 
   render() {
-    const cards = [];
     const otherScores = [];
-    for (let i = 0; i < 100; i += 1) {
-      cards.push(
-        <MathCard
-          cardInputValue={this.state.cardInputValue}
-          cardValue={this.state.currentQuestions[i]}
-          onInputChange={this.onInputChange}
-          index={i}
-          counter={this.state.counter}
-          key={i}
-          handleKeyPress={this.handleCardKeyPress}
-          leftPosition={this.state.cardPositions[i]}
-          isMoving={this.state.isMoving}
-        />
-      );
-    }
+    // cards.reverse();
 
     for (let i = 0; i < this.state.otherScores.length; i += 1) {
       otherScores.push(
@@ -199,7 +192,34 @@ class App extends Component {
             <div>Number Incorrect {this.state.numIncorrect}</div>
           </header>
           <div className="otherScores">{otherScores}</div>
-          <ul className="stack">{cards}</ul>
+          <ul className="stack">
+            <MathCard
+              id="MathCard1"
+              currentQuestionIndex={this.state.currentQuestionIndex}
+              cardInputValue={this.state.cardInputValue}
+              cardValue={this.state.currentQuestions[0]}
+              onInputChange={this.onInputChange}
+              index={0}
+              counter={this.state.counter}
+              key={0}
+              handleKeyPress={this.handleCardKeyPress}
+              leftPosition={this.state.cardPositions[0]}
+              isMoving={this.state.isMoving}
+            />
+            <MathCard
+              id="MathCard2"
+              currentQuestionIndex={this.state.currentQuestionIndex}
+              cardInputValue={this.state.cardInputValue}
+              cardValue={this.state.currentQuestions[1]}
+              onInputChange={this.onInputChange}
+              index={1}
+              counter={this.state.counter}
+              key={1}
+              handleKeyPress={this.handleCardKeyPress}
+              leftPosition={this.state.cardPositions[1]}
+              isMoving={this.state.isMoving}
+            />
+          </ul>
         </div>
       </div>
     );

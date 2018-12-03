@@ -8,19 +8,20 @@
   border: 10px solid #ececec;
   box-sizing: border-box;
   cursor: default;
-  display: flex;
+  /* display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
+  flex-direction: column; */
   top: 10vh;
-  position: absolute;
+  /* position: absolute; */
   transition-timing-function: ease-in;
   transition: ease 0.3s;
+  position: absolute;
 }
 
-#viewport li:nth-child(1) {
+/* #viewport li:nth-child(1) {
   left: 180px;
-}
+} */
 
 @media only screen and (max-width: 600px) {
   #viewport li {
@@ -29,7 +30,7 @@
   }
 }
 
-#viewport li.in-deck:nth-child(3) {
+/* #viewport li.in-deck:nth-child(3) {
   top: 2px;
   transform: translate(2px, 2px) rotate(0.4deg);
 }
@@ -37,7 +38,7 @@
 #viewport li.in-deck:nth-child(2) {
   top: 4px;
   transform: translate(-4px, -2px) rotate(-1deg);
-}
+} */
 
 #viewport li .math-question {
   font-size: 3rem;
