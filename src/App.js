@@ -164,7 +164,7 @@ class App extends Component {
         this.setState({
           isMoving: false
         });
-      }, 1000);
+      }, 100);
     }
   };
 
