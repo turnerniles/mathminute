@@ -20,7 +20,7 @@
     "coverage": "react-scripts test --env=jsdom --coverage"
   },
   "devDependencies": {
-    "firebase": "^5.5.0",
+    "firebase": "^5.7.0",
     "gh-pages": "^2.0.1"
   },
   "browserslist": [
