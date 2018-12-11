@@ -36,7 +36,7 @@ export default class MathCard extends Component {
       <li
         className="math-card"
         style={{
-          left: this.props.leftPosition,
+          zIndex: this.props.currentQuestionIndex === this.props.index ? 2 : 1,
           transition: this.props.isMoving ? "ease .3s" : "initial"
         }}
       >

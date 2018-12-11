@@ -3,10 +3,9 @@ export function genRandomNumber() {
 }
 
 export function genRandomOperator() {
-  const randNum = Math.floor(Math.random() * 1);
-  return ["/"][randNum];
+  const randNum = Math.floor(Math.random() * 4);
 
-  // return ["+", "-", "*", "/"][randNum];
+  return ["+", "-", "*", "/"][randNum];
 }
 
 export function generateQuestion() {
@@ -18,25 +17,16 @@ export function generateQuestion() {
 
   if (randomOperator === "/") {
     randomNumber1 = randomNumber1 * randomNumber2;
-    // while (
-    //   randomNumber1 % randomNumber2 !== 0 ||
-    //   randomNumber1 < randomNumber2
-    // ) {
-    //   randomNumber1 = genRandomNumber();
-    //   randomNumber2 = genRandomNumber();
-    // Don't change the randomOperator in order to maintain operator randomness freqeuncy
     generatedQuestion =
       randomNumber1 + " " + randomOperator + " " + randomNumber2;
-    // }
+  } else {
+    while (eval(generatedQuestion) < 0) {
+      randomNumber1 = genRandomNumber();
+      randomNumber2 = genRandomNumber();
+      // Don't change the randomOperator in order to maintain operator randomness freqeuncy
+      generatedQuestion =
+        randomNumber1 + " " + randomOperator + " " + randomNumber2;
+    }
   }
-  // else {
-  //   while (eval(generatedQuestion) < 0) {
-  //     randomNumber1 = genRandomNumber();
-  //     randomNumber2 = genRandomNumber();
-  //     // Don't change the randomOperator in order to maintain operator randomness freqeuncy
-  //     generatedQuestion =
-  //       randomNumber1 + " " + randomOperator + " " + randomNumber2;
-  //   }
-  // }
   return generatedQuestion;
 }

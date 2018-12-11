@@ -12,7 +12,6 @@ class App extends Component {
     const positions = [];
     for (let i = 0; i < 2; i += 1) {
       questions.push(generateQuestion());
-      positions.push(180 * i);
     }
 
     this.state = {
@@ -22,7 +21,6 @@ class App extends Component {
       counter: 0,
       cards: [],
       cardInputValue: "",
-      cardPositions: positions,
       numCorrect: 0,
       numIncorrect: 0,
       otherScores: [],
@@ -112,13 +110,9 @@ class App extends Component {
       !this.state.isMoving
     ) {
       this.setState((state, props) => {
-        // const positions = state.cardPositions;
-        // positions.forEach((postion, i) => {
-        //   positions[i] = positions[i] - 180;
-        // });
-
-        var currentQuestions = this.state.currentQuestions;
-        currentQuestions[this.state.currentQuestionIndex] = generateQuestion();
+        const currentQuestions = [...state.currentQuestions];
+        currentQuestions[0] = generateQuestion();
+        currentQuestions[1] = currentQuestions[0];
 
         const numCorrect =
           state.cardInputValue == state.answer
@@ -147,17 +141,16 @@ class App extends Component {
           numCorrect,
           numIncorrect,
           isMoving: true,
-          // cardPositions: positions,
-          currentQuestions,
           counter: state.counter + 1,
-          answer: eval(state.currentQuestions[nextQuestionIndex]),
-          cardInputValue: ""
+          answer: eval(currentQuestions[nextQuestionIndex]),
+          cardInputValue: "",
+          currentQuestions
         };
       });
 
       setTimeout(() => {
         // Since we can't control a blur firing after hitting enter
-        // and focusing on the next input we would create an infite loop
+        // and focusing on the next input we would create an infinite loop
         // of 'Enter triggering this function followed by the onBlur triggering this
         // function follow by another onBlur and so on and so forth.
         // Currently set to the animation speed of the card.
@@ -170,8 +163,6 @@ class App extends Component {
 
   render() {
     const otherScores = [];
-    // cards.reverse();
-
     for (let i = 0; i < this.state.otherScores.length; i += 1) {
       otherScores.push(
         <div className="otherScore" key={i}>
@@ -203,7 +194,6 @@ class App extends Component {
               counter={this.state.counter}
               key={0}
               handleKeyPress={this.handleCardKeyPress}
-              leftPosition={this.state.cardPositions[0]}
               isMoving={this.state.isMoving}
             />
             <MathCard
@@ -216,7 +206,6 @@ class App extends Component {
               counter={this.state.counter}
               key={1}
               handleKeyPress={this.handleCardKeyPress}
-              leftPosition={this.state.cardPositions[1]}
               isMoving={this.state.isMoving}
             />
           </ul>
