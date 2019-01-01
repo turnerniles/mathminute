@@ -11,7 +11,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, '../src/web'),
     filename: 'bundle.js',
-    publicPath: '/',
+    publicPath: '/mathminute/',
   },
   module: {
     rules: [
