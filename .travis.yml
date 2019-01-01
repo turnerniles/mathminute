@@ -3,7 +3,7 @@ node_js:
   - "8"
 cache: yarn
 script:
-  - yarn build
+  - yarn predeploy
 deploy:
   provider: pages
   skip_cleanup: true
