@@ -1,143 +1,230 @@
-import React from 'react';
-import { Row, Col, Jumbotron } from 'reactstrap';
+import React, { Component } from 'react';
+import './Home.scss';
+import MathCard from "./MathCard/MathCard.js";
+import Counter from "./Counter/Counter.js";
+import { Firebase, FirebaseRef } from '../../lib/firebase';
 
-const About = () => (
-  <div>
-    <Row>
-      <Jumbotron className="bg-primary text-white">
-        <h1>
-          Web & Mobile App Starter Kit
-        </h1>
-        <p className="lead">
-          For when you're looking to build 'the next big thing', but don't
-          want to start from scratch.
-        </p>
-        <p>
-          This App Starter Kit is built for those who need both a web app + mobile app, and don't
-          want to write and maintain two different code bases. The project shares the 'business
-          logic' and allows flexibility in View components to ensure your project looks and feels
-          native in each platform.
-        </p>
-      </Jumbotron>
-    </Row>
-    <Row className="pt-5">
-      <Col xs="12" md="4" className="pt-3 pt-md-0">
-        <h3>
-          <i className="icon-map" />
-          {' '}
-          Routing
-        </h3>
-        <p>
-          React Router is used to handle all web-side routing.
-        </p>
-        <p>
-          <a target="_blank" rel="noopener noreferrer" href="https://github.com/ReactTraining/react-router" className="btn btn-primary">
-            React Router Docs
-          </a>
-        </p>
-      </Col>
-      <Col xs="12" md="4" className="pt-3 pt-md-0">
-        <h3>
-          <i className="icon-fire" />
-          {' '}
-          Firebase
-        </h3>
-        <p>
-          Firebase is all ready to go with examples on how to read/write data to/from Firebase.
-        </p>
-        <p>
-          <a target="_blank" rel="noopener noreferrer" href="https://firebase.google.com/docs/database/web/start" className="btn btn-primary">
-            Firebase Docs
-          </a>
-        </p>
-      </Col>
-      <Col xs="12" md="4" className="pt-3 pt-md-0">
-        <h3>
-          <i className="icon-organization" />
-          {' '}
-          Redux
-        </h3>
-        <p>
-          State management the 'clean way' via Redux is setup with examples - woohoo!
-        </p>
-        <p>
-          <a target="_blank" rel="noopener noreferrer" href="https://redux.js.org/docs/introduction/" className="btn btn-primary">
-            Redux Docs
-          </a>
-        </p>
-      </Col>
-    </Row>
-    <Row className="pt-md-5 pb-5">
-      <Col xs="12" md="4" className="pt-3 pt-md-0">
-        <h3>
-          <i className="icon-layers" />
-          {' '}
-          Redux Persist
-        </h3>
-        <p>
-          Persist the data stored in Redux for faster load times without needing to hit the server
-          each page load.
-        </p>
-        <p>
-          <a target="_blank" rel="noopener noreferrer" href="https://github.com/rt2zz/redux-persist" className="btn btn-primary">
-            Redux Persist Docs
-          </a>
-        </p>
-      </Col>
-      <Col xs="12" md="4" className="pt-3 pt-md-0">
-        <h3>
-          <i className="icon-drop" />
-          {' '}
-          Web Styles
-        </h3>
-        <p>
-          Webpack, SCSS, Bootstrap and ReactStrap - ready at your fingertips.
-        </p>
-        <p>
-          <a target="_blank" rel="noopener noreferrer" href="https://reactstrap.github.io/components/alerts/" className="btn btn-primary">
-            ReactStrap Docs
-          </a>
-        </p>
-      </Col>
-      <Col xs="12" md="4" className="pt-3 pt-md-0">
-        <h3>
-          <i className="icon-user-following" />
-          {' '}
-          Auth
-        </h3>
-        <p>
-          Most apps need user authentication. This one comes ready to go with Firebase Auth - but
-          you can easily change that within the `/actions/member.js`
-        </p>
-        <p>
-          <a target="_blank" rel="noopener noreferrer" href="https://firebase.google.com/docs/auth/" className="btn btn-primary">
-            Firebase Auth Docs
-          </a>
-        </p>
-      </Col>
-    </Row>
-    <hr />
-    <Row className="pt-5">
-      <Col xs="5" sm="3" lg="2" className="offset-lg-2">
-        <img className="img-fluid rounded-circle" src="https://avatars0.githubusercontent.com/u/1809236?s=460&v=4" alt="Matt Mcnamee" />
-      </Col>
-      <Col xs="12" sm="9" lg="5" className="pt-4 pt-sm-0">
-        <h3>
-          I can help
-        </h3>
-        <p>
-          This repo is a great place to start, but if you'd prefer to sit back and have your new
-          project built for you,
-          {' '}
-          <a target="_blank" rel="noopener noreferrer" href="https://mcnam.ee">
-            get in touch with me directly
-          </a>
-          {' '}
-          and I'll provide a quote.
-        </p>
-      </Col>
-    </Row>
-  </div>
-);
+import { generateQuestion } from "./QuestionGen.js";
+
+class About extends Component {
+  constructor(props) {
+    super(props);
+    const questions = [];
+    const positions = [];
+    for (let i = 0; i < 2; i += 1) {
+      questions.push(generateQuestion());
+    }
+
+    this.state = {
+      currentQuestionIndex: 0,
+      currentQuestions: questions,
+      answer: eval(questions[0]),
+      counter: 0,
+      cards: [],
+      cardInputValue: "",
+      numCorrect: 0,
+      numIncorrect: 0,
+      otherScores: [],
+      playerName: "dogman" + Math.floor(Math.random() * 2),
+      storedRef: null,
+      correctSoundStatus: 'STOPPED',
+    };
+  }
+
+  componentDidMount() {
+    // window.firebase = firebase;
+
+    const leadsRef = Firebase.database().ref("scores");
+
+    let otherScores = [];
+    leadsRef.on("value", snapshot => {
+      otherScores = [];
+      snapshot.forEach(childSnapshot => {
+        const childData = childSnapshot.val();
+        otherScores.push(childData);
+        this.setState({
+          otherScores
+        });
+      });
+    });
+
+    Firebase
+      .database()
+      .ref("/.info/serverTimeOffset")
+      .once("value")
+      .then(
+        data => {
+          this.setState({
+            serverTimeSeconds:
+              60 - new Date(data.val() + Date.now()).getSeconds()
+          });
+        },
+        function(err) {
+          return err;
+        }
+      );
+
+    const fireBaseRef = {
+      playerName: this.state.playerName,
+      correctRef: 0,
+      incorrectRef: 0,
+    };
+
+    var storedScore = Firebase
+      .database()
+      .ref("scores")
+      .push(fireBaseRef);
+
+    this.setState({
+      storedRef: storedScore.key
+    });
+
+    storedScore.onDisconnect().remove();
+  }
+
+  onInputChange = e => {
+    const target = e.target;
+    const value = target.value;
+
+    this.setState({
+      cardInputValue: value
+    });
+  };
+
+  genRandomNumber = () => {
+    return Math.floor(Math.random() * 12 + 1);
+  };
+
+  genRandomOperator = () => {
+    const randNum = Math.floor(Math.random() * 3);
+    return ["+", "-", "*"][randNum];
+  };
+
+  handleCardKeyPress = e => {
+    const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
+    if (e.key === "Enter" || e.key === "Tab" || e.type === "blur") {
+      e.preventDefault();
+    }
+
+    if (
+      (((e.key === "Enter" || e.key === "Tab") && !isMobile) ||
+        (e.type === "blur" && isMobile)) &&
+      !this.state.isMoving
+    ) {
+      this.setState((state, props) => {
+        const currentQuestions = [...state.currentQuestions];
+        currentQuestions[0] = generateQuestion();
+        currentQuestions[1] = currentQuestions[0];
+
+        let numCorrect;
+        let numIncorrect;
+
+        if (parseInt(state.cardInputValue) === state.answer) {
+          numCorrect = state.numCorrect + 1;
+          numIncorrect = state.numIncorrect;
+          const correctSound = new Audio("421002__eponn__correct.wav");
+          correctSound.play();
+        } else {
+          numCorrect = state.numCorrect;
+          numIncorrect = state.numIncorrect + 1;
+          const inCorrectSound = new Audio("Cork,Pop,Strong,Classic.wav");
+          inCorrectSound.play();
+        }
+
+        const fireBaseRef = {
+          playerName: this.state.playerName,
+          correctRef: numCorrect,
+          incorrectRef: numIncorrect
+        };
+
+        const nextQuestionIndex = this.state.currentQuestionIndex === 0 ? 1 : 0;
+
+        Firebase
+          .database()
+          .ref()
+          .update({ [`scores/${this.state.storedRef}`]: fireBaseRef });
+
+        return {
+          currentQuestionIndex: nextQuestionIndex,
+          numCorrect,
+          numIncorrect,
+          isMoving: true,
+          counter: state.counter + 1,
+          answer: eval(currentQuestions[nextQuestionIndex]),
+          cardInputValue: "",
+          currentQuestions,
+        };
+      });
+
+      setTimeout(() => {
+        // Since we can't control a blur firing after hitting enter
+        // and focusing on the next input we would create an infinite loop
+        // of 'Enter triggering this function followed by the onBlur triggering this
+        // function follow by another onBlur and so on and so forth.
+        // Currently set to the animation speed of the card.
+        this.setState({
+          isMoving: false
+        });
+      }, 100);
+    }
+  };
+
+  render() {
+    const otherScores = [];
+    const movingCardClass = this.state.isMoving ? "math-card math-card-special" : "math-card";
+    for (let i = 0; i < this.state.otherScores.length; i += 1) {
+      otherScores.push(
+        <div className="otherScore" key={i}>
+          <div>{this.state.otherScores[i].playerName}</div>
+          <div>Correct: {this.state.otherScores[i].correctRef}</div>
+          <div>Incorrect: {this.state.otherScores[i].incorrectRef}</div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="App">
+        <div id="viewport">
+          <Counter serverTimeSeconds={this.state.serverTimeSeconds} />
+          <div className="otherScores">{otherScores}</div>
+          <div className="scoreBoard">
+            <div className="numCorrect"> ✅ {this.state.numCorrect}</div>
+            <div className="numIncorrect"> ❌ {this.state.numIncorrect}</div>
+          </div>
+          <ul className="stack">
+            <MathCard
+              id="MathCard1"
+              currentQuestionIndex={this.state.currentQuestionIndex}
+              cardInputValue={this.state.cardInputValue}
+              cardValue={this.state.currentQuestions[0]}
+              onInputChange={this.onInputChange}
+              index={0}
+              counter={this.state.counter}
+              key={0}
+              handleKeyPress={this.handleCardKeyPress}
+              isMoving={this.state.isMoving}
+            />
+            <MathCard
+              id="MathCard2"
+              currentQuestionIndex={this.state.currentQuestionIndex}
+              cardInputValue={this.state.cardInputValue}
+              cardValue={this.state.currentQuestions[1]}
+              onInputChange={this.onInputChange}
+              index={1}
+              counter={this.state.counter}
+              key={1}
+              handleKeyPress={this.handleCardKeyPress}
+              isMoving={this.state.isMoving}
+            />
+            <li
+              id="MathCardSpecial"
+              className={movingCardClass}
+            />
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
 
 export default About;

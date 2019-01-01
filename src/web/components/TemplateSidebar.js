@@ -7,10 +7,10 @@ import Footer from './Footer';
 import { Sidebar } from './Sidebar';
 
 const Template = ({ children }) => (
-  <div>
+  <React.Fragment>
     <Member Layout={Header} />
-    <Container fluid>
-      <Row>
+    <Container fluid style={{ height: '100%' }}>
+      <Row style={{ height: '100%' }}>
         <Sidebar />
         <Col md="10" sm="9" className="px-sm-5 py-sm-5 ml-sm-auto">
           {children}
@@ -18,7 +18,7 @@ const Template = ({ children }) => (
         </Col>
       </Row>
     </Container>
-  </div>
+  </React.Fragment>
 );
 
 Template.propTypes = {

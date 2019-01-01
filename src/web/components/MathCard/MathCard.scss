@@ -1,0 +1,72 @@
+#viewport li {
+  width: 150px;
+  height: 40vh;
+  list-style: none;
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2), 1px 1px 1px rgba(0, 0, 0, 0.2);
+  border: 10px solid #ececec;
+  box-sizing: border-box;
+  cursor: default;
+  transition-timing-function: ease-in;
+  transition: ease 0.3s;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: black;
+}
+
+#viewport li.math-card-special {
+  top: 45%;
+  left: 75%;
+  transform: translate(-75%, -45%);
+  transform: rotate(25deg);
+  transition-timing-function: ease-in;
+  transition: ease 0.3s;
+}
+
+@media only screen and (max-width: 600px) {
+  #viewport li {
+    width: 40vw;
+    height: 40vh;
+  }
+}
+
+#viewport li .math-question {
+  font-size: 3rem;
+  line-height: 4rem;
+}
+
+#viewport li .math-question-value-1 {
+  text-align: right;
+  margin: 10px 20px 0 0;
+}
+
+#viewport li .math-question-operator {
+  text-align: left;
+  position: absolute;
+  margin-left: 20px;
+}
+
+#viewport li .math-question-operator-multiply {
+  font-size: 4rem;
+}
+
+#viewport li .math-question-value-2 {
+  text-align: right;
+  right: 0;
+  margin: 0 20px 20px 20px;
+  padding-bottom: 10px;
+  border-bottom: 3px black solid;
+}
+
+#viewport li .input-container {
+}
+
+#viewport li .input-container input {
+  font-size: 36px;
+  height: 40px;
+  width: 80%;
+  text-align: center;
+}

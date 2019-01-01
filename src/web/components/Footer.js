@@ -6,16 +6,16 @@ const Footer = () => (
     <Row>
       <Col sm="12" className="text-right pt-3">
         <p>
-          Learn More on the
+          Learn More and Contribute to the
           {' '}
-          <a target="_blank" rel="noopener noreferrer" href="https://github.com/mcnamee/react-native-starter-kit">
+          <a target="_blank" rel="noopener noreferrer" href="https://github.com/turnerniles/mathminute">
             Github Repo
           </a>
           {' '}
           &nbsp; | &nbsp; Written and Maintained by
           {' '}
-          <a target="_blank" rel="noopener noreferrer" href="https://mcnam.ee">
-            Matt Mcnamee
+          <a target="_blank" rel="noopener noreferrer" href="">
+            Some Blokes
           </a>
           .
         </p>
