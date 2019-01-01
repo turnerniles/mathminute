@@ -4,6 +4,7 @@ node_js:
 cache: yarn
 script:
   - yarn predeploy
+  - yarn deploy
 deploy:
   provider: pages
   skip_cleanup: true
