@@ -18,6 +18,9 @@ import SignUpComponent from '../components/SignUp';
 import LoginContainer from '../../containers/Login';
 import LoginComponent from '../components/Login';
 
+import GameContainer from '../../containers/Game';
+import GameComponent from '../components/Game';
+
 import ForgotPasswordContainer from '../../containers/ForgotPassword';
 import ForgotPasswordComponent from '../components/ForgotPassword';
 
@@ -54,10 +57,21 @@ const Index = () => (
       )}
     />
     <Route
+      path="/game"
+      render={props => (
+        <TemplateSidebar>
+          <GameContainer {...props} Layout={GameComponent} />
+        </TemplateSidebar>
+      )}
+    />
+    <Route
       path="/forgot-password"
       render={props => (
         <TemplateNothing>
-          <ForgotPasswordContainer {...props} Layout={ForgotPasswordComponent} />
+          <ForgotPasswordContainer
+            {...props}
+            Layout={ForgotPasswordComponent}
+          />
         </TemplateNothing>
       )}
     />
@@ -88,7 +102,11 @@ const Index = () => (
     <Route
       render={props => (
         <TemplateSidebar>
-          <Error {...props} title="404" content="Sorry, the route you requested does not exist" />
+          <Error
+            {...props}
+            title="404"
+            content="Sorry, the route you requested does not exist"
+          />
         </TemplateSidebar>
       )}
     />

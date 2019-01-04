@@ -3,14 +3,12 @@ import './Home.scss';
 import MathCard from './MathCard/MathCard.js';
 import Counter from './Counter/Counter.js';
 import { Firebase } from '../../lib/firebase';
-
 import { generateQuestion } from '../../actions/QuestionGen.js';
 
-class About extends Component {
+class Game extends Component {
   constructor(props) {
     super(props);
     const questions = [];
-    const positions = [];
     for (let i = 0; i < 2; i += 1) {
       questions.push(generateQuestion());
     }
@@ -25,15 +23,13 @@ class About extends Component {
       numCorrect: 0,
       numIncorrect: 0,
       otherScores: [],
-      playerName: `dogman${  Math.floor(Math.random() * 2)}`,
+      playerName: `dogman${Math.floor(Math.random() * 2)}`,
       storedRef: null,
       correctSoundStatus: 'STOPPED',
     };
   }
 
   componentDidMount() {
-    // window.firebase = firebase;
-
     const leadsRef = Firebase.database().ref('scores');
 
     let otherScores = [];
@@ -48,8 +44,7 @@ class About extends Component {
       });
     });
 
-    Firebase
-      .database()
+    Firebase.database()
       .ref('/.info/serverTimeOffset')
       .once('value')
       .then(
@@ -59,7 +54,7 @@ class About extends Component {
               60 - new Date(data.val() + Date.now()).getSeconds(),
           });
         },
-        (err) => err,
+        err => err,
       );
 
     const fireBaseRef = {
@@ -68,8 +63,7 @@ class About extends Component {
       incorrectRef: 0,
     };
 
-    const storedScore = Firebase
-      .database()
+    const storedScore = Firebase.database()
       .ref('scores')
       .push(fireBaseRef);
 
@@ -108,14 +102,15 @@ class About extends Component {
       && !this.state.isMoving
     ) {
       this.setState((state, props) => {
-        const currentQuestions = [...state.currentQuestions];
-        currentQuestions[0] = generateQuestion();
-        currentQuestions[1] = currentQuestions[0];
+        // const currentQuestions = [...state.currentQuestions];
+        // currentQuestions[0] = generateQuestion();
+        // currentQuestions[1] = currentQuestions[0];
+        props.generateQuestions();
 
         let numCorrect;
         let numIncorrect;
 
-        if (parseInt(state.cardInputValue) === state.answer) {
+        if (parseInt(state.cardInputValue) === props.answer) {
           numCorrect = state.numCorrect + 1;
           numIncorrect = state.numIncorrect;
           const correctSound = new Audio('421002__eponn__correct.wav');
@@ -135,8 +130,7 @@ class About extends Component {
 
         const nextQuestionIndex = this.state.currentQuestionIndex === 0 ? 1 : 0;
 
-        Firebase
-          .database()
+        Firebase.database()
           .ref()
           .update({ [`scores/${this.state.storedRef}`]: fireBaseRef });
 
@@ -167,24 +161,28 @@ class About extends Component {
 
   render() {
     const otherScores = [];
-    const movingCardClass = this.state.isMoving ? 'math-card math-card-special' : 'math-card';
+    const movingCardClass = this.state.isMoving
+      ? 'math-card math-card-special'
+      : 'math-card';
     for (let i = 0; i < this.state.otherScores.length; i += 1) {
       otherScores.push(
         <div className="otherScore" key={i}>
           <div>{this.state.otherScores[i].playerName}</div>
           <div>
-Correct:
+            Correct:
             {' '}
             {this.state.otherScores[i].correctRef}
-                    </div>
+          </div>
           <div>
-Incorrect:
+            Incorrect:
             {' '}
             {this.state.otherScores[i].incorrectRef}
-                    </div>
+          </div>
         </div>,
       );
     }
+
+    console.log('this.props.currentQuestions[0]', this.props.currentQuestions[0]);
 
     return (
       <div className="App">
@@ -197,20 +195,20 @@ Incorrect:
 ✅
               {' '}
               {this.state.numCorrect}
-                        </div>
+            </div>
             <div className="numIncorrect">
               {' '}
 ❌
               {' '}
               {this.state.numIncorrect}
-                        </div>
+            </div>
           </div>
           <ul className="stack">
             <MathCard
               id="MathCard1"
               currentQuestionIndex={this.state.currentQuestionIndex}
               cardInputValue={this.state.cardInputValue}
-              cardValue={this.state.currentQuestions[0]}
+              cardValue={this.props.currentQuestions[0]}
               onInputChange={this.onInputChange}
               index={0}
               counter={this.state.counter}
@@ -222,7 +220,7 @@ Incorrect:
               id="MathCard2"
               currentQuestionIndex={this.state.currentQuestionIndex}
               cardInputValue={this.state.cardInputValue}
-              cardValue={this.state.currentQuestions[1]}
+              cardValue={this.props.currentQuestions[1]}
               onInputChange={this.onInputChange}
               index={1}
               counter={this.state.counter}
@@ -230,10 +228,7 @@ Incorrect:
               handleKeyPress={this.handleCardKeyPress}
               isMoving={this.state.isMoving}
             />
-            <li
-              id="MathCardSpecial"
-              className={movingCardClass}
-            />
+            <li id="MathCardSpecial" className={movingCardClass} />
           </ul>
         </div>
       </div>
@@ -241,4 +236,4 @@ Incorrect:
   }
 }
 
-export default About;
+export default Game;
