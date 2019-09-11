@@ -64,7 +64,7 @@
     "firebase": "^5.4.1",
     "gh-pages": "^2.0.1",
     "hammerjs": "^2.0.8",
-    "native-base": "^2.4.2",
+    "native-base": "^2.13.8",
     "postcss-cssnext": "^3.1.0",
     "postcss-import": "^12.0.0",
     "prop-types": "^15.6.1",
